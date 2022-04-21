@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AppThemeContextProvider from './contexts/AppThemeContext';
+import { Provider as JotaiProvider } from 'jotai';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AppThemeContextProvider>
-      <App />
+      <JotaiProvider>
+        <App />
+      </JotaiProvider>
     </AppThemeContextProvider>
   </React.StrictMode>
 );

@@ -1,16 +1,18 @@
 import React from 'react'
 import { useAtom } from 'jotai'
-import authStateAtom from '../store/AuthState'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import authStateAtom from '../store/AuthState'
 
-function CheckAuth() {
+function IsSiswa() {
   const [authState, setAuthState] = useAtom(authStateAtom)
+  
+  // Cek User Siswa atau Tidak
+  let isSiswa = authState.role == 'siswa'
 
-  // Cek User Login atau Tidak
-  if (Object.entries(authState).length === 0) {
+  if (!isSiswa) {
     
-    toast.error('Please Login !', {
+    toast.error('Not Siswa !', {
       toastId: 'id',
       position: "top-right",
       autoClose: 5000,
@@ -22,11 +24,12 @@ function CheckAuth() {
       theme: 'colored'
     });
 
-    return <Navigate to="/login" replace/>
-  } 
+    return <Navigate to="/" replace/>
 
+  } 
+  
   return <Outlet/>
 
 }
 
-export default CheckAuth
+export default IsSiswa

@@ -13,7 +13,15 @@ function Home() {
         component={Link}
         to="/admin/informasi"
       >
-        Protected
+        Admin
+      </Button>
+
+      <Button
+        variant="outlined"
+        component={Link}
+        to="/siswa/informasi"
+      >
+        Siswa
       </Button>
     </>
   )

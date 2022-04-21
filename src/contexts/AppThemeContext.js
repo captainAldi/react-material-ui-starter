@@ -14,7 +14,7 @@ const AppThemeContextProvider = (props) => {
         localStorage.setItem(process.env.REACT_APP_LS_KEY_COLOR, mode === 'light' ? 'dark' : 'light')
       }
     }), 
-    []
+    [mode]
   )
 
   const theme = useMemo(

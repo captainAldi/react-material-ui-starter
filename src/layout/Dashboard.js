@@ -84,7 +84,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const menuItem = [
+const menuItemAdmin = [
   {
     'label': 'Informasi',
     'to': '/admin/informasi',
@@ -93,6 +93,24 @@ const menuItem = [
   {
     'label': 'Pendaftar',
     'to': '/admin/pendaftar',
+    'icon': <MailIcon/>
+  },
+  {
+    'label': 'Profile',
+    'to': '/admin/profile',
+    'icon': <MailIcon/>
+  },
+]
+
+const menuItemSiswa = [
+  {
+    'label': 'Informasi',
+    'to': '/siswa/informasi',
+    'icon': <InboxIcon/>
+  },
+  {
+    'label': 'Profile',
+    'to': '/siswa/profile',
     'icon': <MailIcon/>
   },
 ]
@@ -131,15 +149,13 @@ export default function Dashboard() {
     try {
       setIsSubmitting(true)
 
+      navigate('/', {
+        replace: true,
+      })
+
       setAuthState(RESET)
 
-      setTimeout(() => {
-        navigate('/', {
-          replace: true,
-        })
-
-        navigate(0)
-      }, 2000);
+      navigate(0)
 
     } catch (error) {
       setIsSubmitting(false)
@@ -170,7 +186,7 @@ export default function Dashboard() {
           <Box sx={{ flexGrow: 0 }} >
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={authState.name} src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -219,7 +235,26 @@ export default function Dashboard() {
         </DrawerHeader>
         <Divider />
         <List>
-          {menuItem.map((element, index) => (
+          {authState.role == 'admin' && menuItemAdmin.map((element, index) => (
+            <ListItem 
+              button 
+              key={index} 
+              component={NavLink} 
+              to={element.to}
+              style={({ isActive }) => {
+              return {
+                background: isActive ? theme.palette.action.selected : ''
+              };
+            }}
+            >
+              <ListItemIcon>
+                {element.icon}
+              </ListItemIcon>
+              <ListItemText primary={element.label} />
+            </ListItem>
+          ))}
+
+          {authState.role == 'siswa' && menuItemSiswa.map((element, index) => (
             <ListItem 
               button 
               key={index} 

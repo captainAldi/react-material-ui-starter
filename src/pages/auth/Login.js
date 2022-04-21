@@ -18,11 +18,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 
 import authStateAtom from '../../store/AuthState'
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+import { v4 as uuidv4 } from 'uuid';
 
 function Login() {
-
-  const LS_KEY_USER = process.env.REACT_APP_LS_KEY_USER
-  console.log(LS_KEY_USER)
   
   const navigate = useNavigate()
   const [authState, setAuthState] = useAtom(authStateAtom)
@@ -81,13 +82,25 @@ function Login() {
 
         setIsSubmitting(true)
 
-        await setAuthState(form)
+        let url = `${process.env.REACT_APP_API_ENDPOINT}/login`
 
-        setTimeout(() => {
-          navigate('/admin/informasi', {
-            replace: true
-          })
-        }, 3000);
+        let formData = new FormData()
+        formData.append('email', form.email)
+        formData.append('password', form.password)
+
+        let config = {
+          headers: {
+            'Accept': 'application/json'
+          }
+        }
+
+        const response = await axios.post(url, formData, config)
+
+        await setAuthState(response.data.data)
+
+        navigate('/admin/informasi', {
+          replace: true
+        })
 
       } catch (error) {
         
@@ -95,6 +108,18 @@ function Login() {
 
         setError(newError)
         setIsSubmitting(false)
+
+        toast.error(error.response.data.data.error, {
+          toastId: uuidv4(),
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored'
+        });
 
       }
 
